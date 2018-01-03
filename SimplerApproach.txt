@@ -1,0 +1,69 @@
+package com.aditya.mlabs.matrix;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Scanner;
+import java.util.Set;
+import java.math.*;
+
+public class FindPairsOnSameDiagnolOfMatrix {
+			 
+    public static void main(String args[] ) throws Exception {
+    	/* Enter your code here. Read input from STDIN. Print output to STDOUT */
+        Scanner s = new Scanner(System.in);
+        int noOfTestCases = s.nextInt();                 // Reading input from STDIN
+        //System.out.println("Hi, " + name + ".");    // Writing output to STDOUT
+        Map<Integer,List<String>> testCaseNoToTruePointsPair = new LinkedHashMap<Integer, List<String>>();
+        for(int i=0; i<noOfTestCases; i++){
+        	s.nextLine(); // throw away the newline.
+        	// Every Test Case :-
+        	int noOfTruePointsForThisTestCase = s.nextInt();
+        	List<String> coordinatesOfTruePoints = new ArrayList<String>();
+        	for(int j = 0; j < noOfTruePointsForThisTestCase; j++){
+        		s.nextLine(); // throw away the newline.
+        		int xCoordinate = s.nextInt();
+        		int yCoordinate = s.nextInt();
+        		coordinatesOfTruePoints.add(String.valueOf(xCoordinate)+":"+String.valueOf(yCoordinate));
+        	}
+        	testCaseNoToTruePointsPair.put(i, coordinatesOfTruePoints);
+        }
+        
+        for(Integer key : testCaseNoToTruePointsPair.keySet()){
+        	printTotalNoOfPtsThatLiesOnSameDiagnolForThisTestCase(testCaseNoToTruePointsPair.get(key));
+        }
+        
+    }
+    
+	private static void printTotalNoOfPtsThatLiesOnSameDiagnolForThisTestCase(List<String> listOfPointsOfCurrentTestCase) {
+		Set<String> ptsLieingOnSameDiagnol = new HashSet<String>();
+		for(int i=0; i<listOfPointsOfCurrentTestCase.size(); i++){
+			for(int j=i+1; j<listOfPointsOfCurrentTestCase.size(); j++){
+				String point1st = listOfPointsOfCurrentTestCase.get(i);
+				String point2nd = listOfPointsOfCurrentTestCase.get(j);
+				
+				String[] coordsOfPt1 = point1st.split(":");
+				String[] coordsOfPt2 = point2nd.split(":");
+				
+				int xCoordOfPt1 = Integer.valueOf(coordsOfPt1[0]);
+				int yCoordOfPt1 = Integer.valueOf(coordsOfPt1[1]);
+				
+				int xCoordOfPt2 = Integer.valueOf(coordsOfPt2[0]);
+				int yCoordOfPt2 = Integer.valueOf(coordsOfPt2[1]);
+				
+				int diffOfXCoordinates = Math.abs(xCoordOfPt1 - xCoordOfPt2);
+				int diffOfYCoordinates = Math.abs(yCoordOfPt1 - yCoordOfPt2);
+				
+				if(diffOfXCoordinates == diffOfYCoordinates){
+					ptsLieingOnSameDiagnol.add(point1st);
+					ptsLieingOnSameDiagnol.add(point2nd);
+				}
+			}
+		}
+		System.out.println(ptsLieingOnSameDiagnol.size());
+	}
+
+	
+}
