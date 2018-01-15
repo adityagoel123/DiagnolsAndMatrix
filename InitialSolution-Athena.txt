@@ -1,0 +1,111 @@
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Scanner;
+import java.util.Set;
+import java.math.*;
+
+public class Solution {
+	
+	 static List<List<String>> listOfListofCoordinatesOfEacDiag = new ArrayList<List<String>>();		 
+	 public static void populateDiagnolsDataAttributes(){
+		 int rowCount = 9;
+		  int columnCount = 9;
+		  
+		  for (int r = 1; r <= rowCount; r++) {
+			  List<String> listOfCoordinates = new ArrayList<String>();
+			  for (int row = r, col = 1; row >= 1 && col <= columnCount; row--, col++) {
+				  //System.out.print(row+":"+col + " ");
+				  listOfCoordinates.add(row+":"+col);
+			  }
+			  listOfListofCoordinatesOfEacDiag.add(listOfCoordinates);
+			  //System.out.println();
+		  }
+		   
+		  for (int c = 2; c <= columnCount; c++) {
+			  List<String> listOfCoordinates = new ArrayList<String>();
+			  for (int row = rowCount, col = c; row >= 1 && col <= columnCount; row--, col++) {
+				  //System.out.print(row+":"+col + " ");
+				  listOfCoordinates.add(row+":"+col);
+			  }
+			  listOfListofCoordinatesOfEacDiag.add(listOfCoordinates);
+			  //System.out.println();
+		  }
+
+		  
+		  for (int r = 1; r <= rowCount; r++) {
+			  List<String> listOfCoordinates = new ArrayList<String>();
+			  for (int row = r, col = columnCount; row >= 1 && col >= 1; row--, col--) {
+				  listOfCoordinates.add(row+":"+col);
+				  //System.out.print(row+":"+col + " "); 
+			  }
+			  listOfListofCoordinatesOfEacDiag.add(listOfCoordinates);
+			  //System.out.println();
+		  }
+		   
+		  for (int c = columnCount-1; c >=1 ; c--) {
+			  List<String> listOfCoordinates = new ArrayList<String>();
+			  for (int row = rowCount, col = c; row >= 1 && col >= 1; row--, col--) {
+				  listOfCoordinates.add(row+":"+col);
+				  //System.out.print(row+":"+col + " "); 
+			  }
+			  listOfListofCoordinatesOfEacDiag.add(listOfCoordinates);
+			  //System.out.println();
+		  }
+	 }
+			 
+    public static void main(String args[] ) throws Exception {
+    	populateDiagnolsDataAttributes();
+    	/* Enter your code here. Read input from STDIN. Print output to STDOUT */
+        Scanner s = new Scanner(System.in);
+        int noOfTestCases = s.nextInt();                 // Reading input from STDIN
+        //System.out.println("Hi, " + name + ".");    // Writing output to STDOUT
+        Map<Integer,List<String>> testCaseNoToTruePointsPair = new LinkedHashMap<Integer, List<String>>();
+        for(int i=0; i<noOfTestCases; i++){
+        	s.nextLine(); // throw away the newline.
+        	// Every Test Case :-
+        	int noOfTruePointsForThisTestCase = s.nextInt();
+        	List<String> coordinatesOfTruePoints = new ArrayList<String>();
+        	for(int j = 0; j < noOfTruePointsForThisTestCase; j++){
+        		s.nextLine(); // throw away the newline.
+        		int xCoordinate = s.nextInt();
+        		int yCoordinate = s.nextInt();
+        		coordinatesOfTruePoints.add(String.valueOf(xCoordinate)+":"+String.valueOf(yCoordinate));
+        	}
+        	testCaseNoToTruePointsPair.put(i, coordinatesOfTruePoints);
+        }
+        
+        for(Integer key : testCaseNoToTruePointsPair.keySet()){
+        	//printTotalNoOfPairsWhichLiesInSameDiagnolEveryTestCaseWise(testCaseNoToTruePointsPair.get(key));
+        	printTotalNoOfPtsThatLiesOnSameDiagnolForThisTestCase(testCaseNoToTruePointsPair.get(key));
+        }
+        
+    }
+    
+	private static void printTotalNoOfPtsThatLiesOnSameDiagnolForThisTestCase(List<String> listOfPointsOfCurrentTestCase) {
+		Map<Integer, Set<String>> diagnolNoToItsPoints = new HashMap<Integer, Set<String>>();
+		for(int i=0; i<listOfListofCoordinatesOfEacDiag.size(); i++) {
+			List<String> listOfPointsOfThisDiagnol = listOfListofCoordinatesOfEacDiag.get(i);
+			
+			Set<String> pointsThatLieOnThisDiagnol = new HashSet<String>();
+			for(String point : listOfPointsOfCurrentTestCase) {
+				if(listOfPointsOfThisDiagnol.contains(point)) {
+					pointsThatLieOnThisDiagnol.add(point);
+				}
+			}
+			if(null != pointsThatLieOnThisDiagnol && !pointsThatLieOnThisDiagnol.isEmpty()) {
+				diagnolNoToItsPoints.put(i, pointsThatLieOnThisDiagnol);
+			}
+		}
+		Set<String> finalSetOfPointsColloborate = new HashSet<String>();
+		for(Integer diagnolNos : diagnolNoToItsPoints.keySet()){
+			if(diagnolNoToItsPoints.get(diagnolNos).size()>1){
+				finalSetOfPointsColloborate.addAll(diagnolNoToItsPoints.get(diagnolNos));
+			}
+		}
+		System.out.println(finalSetOfPointsColloborate.size());
+	}
+}
